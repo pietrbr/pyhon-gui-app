@@ -60,7 +60,7 @@ def make_window(theme):
                         size=(20, 20),
                         key='-PROGRESS BAR RADIATION-'),
         sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
-        sg.Text("Watt / s")
+        sg.Text("Watt / m2")
     ]]
 
     logging_layout = [
