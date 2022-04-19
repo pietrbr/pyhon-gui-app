@@ -144,11 +144,9 @@ def main():
     window = make_window(sg.theme())
 
     # This is the Event Loop
-    ########################USE THREADS FOR LONG MEASUREMENTS (?)
+    ######################## USE THREADS FOR LONG-LASTING MEASUREMENTS (?)
     while True:
         event, values = window.read(timeout=100)
-        # keep an animation running as to show that things are happening
-        # window['-GIF-IMAGE-'].update_animation(sg.DEFAULT_BASE64_LOADING_GIF, time_between_frames=100)
         if event not in (sg.TIMEOUT_EVENT, sg.WIN_CLOSED):
             print('============ Event = ', event, ' ==============')
             print('-------- Values Dictionary (key=value) --------')
@@ -239,5 +237,7 @@ if __name__ == '__main__':
     # sg.theme('black')
     # sg.theme('dark red')
     sg.theme('dark green 7')
+    sg.theme('BluePurple')
+    sg.theme('Python')
     # sg.theme('DefaultNoMoreNagging')
     main()

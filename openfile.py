@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 
 import PySimpleGUI as sg
-from temperature_measure import *
+import os
 
 class WindowOpenFile():
     def __init__(self, theme='BluePurple'):
-        sg.theme(theme)
+        self.path = '/home/$USER/Documents/Vineyards_data/'
+        self.name = 'data1'
+        self.file = None
         
+        sg.theme(theme)
         layout = [
             [
                 sg.Text('Type the path where you want your csv file to be saved:'),
             ],
             [
-                sg.Input(size=(70, 1), key='-PATH-', default_text='/home/$USER/Documents/Vineyards_data/')
+                sg.Input(size=(70, 1), key='-PATH-', default_text='/home/ppp/Documents/Vineyards_data/')
             ],
             [
                 sg.Text('Type the name for your csv file:'),
@@ -21,27 +24,29 @@ class WindowOpenFile():
                 sg.Input(size=(70, 1), key='-NAME-', default_text='')
             ],
             [
-                sg.Button('Done'),
+                sg.Button('Open'),
                 sg.Button('Cancel')
             ]]
 
-        window = sg.Window('Pattern 2B', layout)
+        window = sg.Window('Open file', layout)
 
         while True:
             event, values = window.read()
-            print(event, values)
             if event == sg.WIN_CLOSED or event == 'Cancel':
                 break
-            if event == 'Save':
-                sg.Output()
-                f = open()
+            if event == 'Open':
+                self.path = values['-PATH-']
+                self.name = values['-NAME-']
+                try:
+                    os.mkdir(self.path)
+                self.file = open(self.path+self.name+'.csv', 'w+')
                 pass
 
         window.close()
 
 def main():
     w = WindowOpenFile()
-    
+    print(w.file)
 
 if __name__ == '__main__':
     main()
