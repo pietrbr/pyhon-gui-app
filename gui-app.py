@@ -6,10 +6,15 @@ from temperature_measure import *
 
 def make_window(theme):
     sg.theme(theme)
-    menu_def = [['&Application', ['&Exit']], ['&Help', ['&About']]]
+    menu_def = [['&Application', ['&Create and open file']], ['&Help', ['&About']]]
 
-    app_layout = [[
-        sg.B('Air temperature', size=(20, 1)),
+    app_layout = [
+    [
+        sg.Text('Location:', size=(10, 1)),
+        sg.Input(size=(30, 1), key='-LOCATION-')
+    ],
+    [
+        sg.Button('Air temperature', size=(20, 1)),
         sg.ProgressBar(100,
                        orientation='h',
                        size=(20, 20),
@@ -18,7 +23,7 @@ def make_window(theme):
         sg.Text("°C")
     ],
     [
-        sg.B('Canopy temperature', size=(20, 1)),
+        sg.Button('Canopy temperature', size=(20, 1)),
         sg.ProgressBar(100,
                         orientation='h',
                         size=(20, 20),
@@ -27,7 +32,7 @@ def make_window(theme):
         sg.Text("°C")
     ],
     [
-        sg.B('Dew temperature', size=(20, 1)),
+        sg.Button('Dew temperature', size=(20, 1)),
         sg.ProgressBar(100,
                         orientation='h',
                         size=(20, 20),
@@ -36,7 +41,7 @@ def make_window(theme):
         sg.Text("°C")
     ],
     [
-        sg.B('Wnd speed', size=(20, 1)),
+        sg.Button('Wind speed', size=(20, 1)),
         sg.ProgressBar(100,
                         orientation='h',
                         size=(20, 20),
@@ -45,7 +50,7 @@ def make_window(theme):
         sg.Text("m/s")
     ],
     [
-        sg.B('Pressure', size=(20, 1)),
+        sg.Button('Pressure', size=(20, 1)),
         sg.ProgressBar(100,
                         orientation='h',
                         size=(20, 20),
@@ -54,13 +59,16 @@ def make_window(theme):
         sg.Text("hPa")
     ],
     [
-        sg.B('Solar radiation', size=(20, 1)),
+        sg.Button('Solar radiation', size=(20, 1)),
         sg.ProgressBar(100,
                         orientation='h',
                         size=(20, 20),
                         key='-PROGRESS BAR RADIATION-'),
         sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
-        sg.Text("Watt / m2")
+        sg.Text("W/m\u00b2")
+    ],
+    [
+        sg.Button('Save', size=(10, 3))
     ]]
 
     logging_layout = [
@@ -77,7 +85,6 @@ def make_window(theme):
                          autoscroll=True,
                          auto_refresh=True)
         ]
-        # [sg.Output(size=(60,15), font='Courier 8', expand_x=True, expand_y=True)]
     ]
 
     graphing_layout = [[
@@ -212,16 +219,16 @@ def main():
             print("[LOG] User Chose Theme: " + str(theme_chosen))
             window.close()
             window = make_window(theme_chosen)
-        elif event == 'Versions':
-            sg.popup(sg.get_versions(), keep_on_top=True)
+        elif event == 'Create and open file':
+            print('[LOG] Clicked Create and open file')
+            sg.popup
         elif event == 'About':
             print("[LOG] Clicked About!")
             sg.popup(
-                'PySimpleGUI Demo All Elements',
-                'Right click anywhere to see right click menu',
-                'Visit each of the tabs to see available elements',
-                'Output of event and values can be see in Output tab',
-                'The event and values dictionary is printed after every event',
+                'Application for the collection of data for the ANSIA Team of the ASP Program XVIII cycle.',
+                'The application was kindly designed by the online boys P&G.',
+                'The application is based on the design provided in the PySimpleGUI Demo All Elements.',
+                '','The app may contain an easter egg...','',
                 keep_on_top=True)
 
     window.close()
