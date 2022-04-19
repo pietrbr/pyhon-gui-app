@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# TODO: canopy temeprature si raccoglie attraverso la camera termica
+# TODO: aggiungere tab per la raccolta foto
+
 import PySimpleGUI as sg
 from temperature_measure import *
 
