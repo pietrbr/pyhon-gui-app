@@ -3,92 +3,92 @@
 # TODO: canopy temeprature si raccoglie attraverso la camera termica
 # TODO: aggiungere tab per la raccolta foto
 
+from turtle import window_width
+
 import PySimpleGUI as sg
+
 from slave_module import *
+
+from Openfile import WindowOpenFile
 
 
 def make_window(theme):
     sg.theme(theme)
-    menu_def = [['&Application', ['&Create and open file']], ['&Help', ['&About']]]
+    menu_def = [['&Application', ['&Create and open file']],
+                ['&Help', ['&About']]]
 
-    app_layout = [
-    [
+    app_layout = [[
         sg.Text('Location:', size=(10, 1)),
         sg.Input(size=(30, 1), key='-LOCATION-')
     ],
-    [
-        sg.Button('Air temperature', size=(20, 1)),
-        sg.ProgressBar(100,
-                       orientation='h',
-                       size=(20, 20),
-                       key='-PROGRESS BAR AIR-'),
-        sg.Text(size=(5, 1), key='-AIR DISPLAY-'),
-        sg.Text("°C")
-    ],
-    [
-        sg.Button('Canopy temperature', size=(20, 1)),
-        sg.ProgressBar(100,
-                        orientation='h',
-                        size=(20, 20),
-                        key='-PROGRESS BAR CANOPY-'),
-        sg.Text(size=(5, 1), key='-CANOPY DISPLAY-'),
-        sg.Text("°C")
-    ],
-    [
-        sg.Button('Dew temperature', size=(20, 1)),
-        sg.ProgressBar(100,
-                        orientation='h',
-                        size=(20, 20),
-                        key='-PROGRESS BAR DEW-'),
-        sg.Text(size=(5, 1), key='-DEW DISPLAY-'),
-        sg.Text("°C")
-    ],
-    [
-        sg.Button('Wind speed', size=(20, 1)),
-        sg.ProgressBar(100,
-                        orientation='h',
-                        size=(20, 20),
-                        key='-PROGRESS BAR WIND-'),
-        sg.Text(size=(5, 1), key='-WIND DISPLAY-'),
-        sg.Text("m/s")
-    ],
-    [
-        sg.Button('Pressure', size=(20, 1)),
-        sg.ProgressBar(100,
-                        orientation='h',
-                        size=(20, 20),
-                        key='-PROGRESS BAR PRESSURE-'),
-        sg.Text(size=(5, 1), key='-PRESSURE DISPLAY-'),
-        sg.Text("hPa")
-    ],
-    [
-        sg.Button('Solar radiation', size=(20, 1)),
-        sg.ProgressBar(100,
-                        orientation='h',
-                        size=(20, 20),
-                        key='-PROGRESS BAR RADIATION-'),
-        sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
-        sg.Text("W/m\u00b2")
-    ],
-    [
-        sg.Button('Save', size=(10, 3))
-    ]]
+                  [
+                      sg.Button('Air temperature', size=(20, 1)),
+                      sg.ProgressBar(100,
+                                     orientation='h',
+                                     size=(20, 20),
+                                     key='-PROGRESS BAR AIR-'),
+                      sg.Text(size=(5, 1), key='-AIR DISPLAY-'),
+                      sg.Text("°C")
+                  ],
+                  [
+                      sg.Button('Canopy temperature', size=(20, 1)),
+                      sg.ProgressBar(100,
+                                     orientation='h',
+                                     size=(20, 20),
+                                     key='-PROGRESS BAR CANOPY-'),
+                      sg.Text(size=(5, 1), key='-CANOPY DISPLAY-'),
+                      sg.Text("°C")
+                  ],
+                  [
+                      sg.Button('Dew temperature', size=(20, 1)),
+                      sg.ProgressBar(100,
+                                     orientation='h',
+                                     size=(20, 20),
+                                     key='-PROGRESS BAR DEW-'),
+                      sg.Text(size=(5, 1), key='-DEW DISPLAY-'),
+                      sg.Text("°C")
+                  ],
+                  [
+                      sg.Button('Wind speed', size=(20, 1)),
+                      sg.ProgressBar(100,
+                                     orientation='h',
+                                     size=(20, 20),
+                                     key='-PROGRESS BAR WIND-'),
+                      sg.Text(size=(5, 1), key='-WIND DISPLAY-'),
+                      sg.Text("m/s")
+                  ],
+                  [
+                      sg.Button('Pressure', size=(20, 1)),
+                      sg.ProgressBar(100,
+                                     orientation='h',
+                                     size=(20, 20),
+                                     key='-PROGRESS BAR PRESSURE-'),
+                      sg.Text(size=(5, 1), key='-PRESSURE DISPLAY-'),
+                      sg.Text("hPa")
+                  ],
+                  [
+                      sg.Button('Solar radiation', size=(20, 1)),
+                      sg.ProgressBar(100,
+                                     orientation='h',
+                                     size=(20, 20),
+                                     key='-PROGRESS BAR RADIATION-'),
+                      sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
+                      sg.Text("W/m\u00b2")
+                  ], [sg.Button('Save', size=(10, 3))]]
 
-    logging_layout = [
-        [sg.Text("Anything printed will display here!")],
-        [
-            sg.Multiline(size=(60, 15),
-                         font='Courier 8',
-                         expand_x=True,
-                         expand_y=True,
-                         write_only=True,
-                         reroute_stdout=True,
-                         reroute_stderr=True,
-                         echo_stdout_stderr=True,
-                         autoscroll=True,
-                         auto_refresh=True)
-        ]
-    ]
+    logging_layout = [[sg.Text("Anything printed will display here!")],
+                      [
+                          sg.Multiline(size=(60, 15),
+                                       font='Courier 8',
+                                       expand_x=True,
+                                       expand_y=True,
+                                       write_only=True,
+                                       reroute_stdout=True,
+                                       reroute_stderr=True,
+                                       echo_stdout_stderr=True,
+                                       autoscroll=True,
+                                       auto_refresh=True)
+                      ]]
 
     graphing_layout = [[
         sg.Text("Anything you would use to graph will display here!")
@@ -130,15 +130,16 @@ def make_window(theme):
                     expand_y=True),
     ]]
     layout[-1].append(sg.Sizegrip())
-    window = sg.Window('Data collection application',
-                       layout,
-                       grab_anywhere=True,
-                       resizable=True,
-                       margins=(0, 0),
-                       use_custom_titlebar=True,
-                       finalize=True,
-                       keep_on_top=True,
-                       scaling=2.0)
+    window = sg.Window(
+        'Data collection application',
+        layout,
+        grab_anywhere=True,
+        resizable=True,
+        margins=(0, 0),
+        # use_custom_titlebar=True,
+        finalize=True,
+        keep_on_top=True,
+        scaling=4.0)
     window.set_min_size(window.size)
     return window
 
@@ -146,9 +147,8 @@ def make_window(theme):
 def main():
     window = make_window(sg.theme())
 
-    # This is the Event Loop
-    ######################## USE THREADS FOR LONG-LASTING MEASUREMENTS (?)
-    while True:
+    ### USE THREADS FOR LONG-LASTING MEASUREMENTS
+    while True:  # This is the Event Loop
         event, values = window.read(timeout=100)
         if event not in (sg.TIMEOUT_EVENT, sg.WIN_CLOSED):
             print('============ Event = ', event, ' ==============')
@@ -159,6 +159,7 @@ def main():
             print("[LOG] Clicked Exit!")
             break
 
+        ### SENSOR ACQUISITION ###
         elif event == 'Air temperature':
             meas = TemperatureMeasure()
             window['-AIR DISPLAY-'].update("{:.2f}".format(
@@ -207,29 +208,35 @@ def main():
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             print("[LOG] Temperature measurement complete!")
 
+        # elif event == "-GRAPH-":
+        #     graph = window['-GRAPH-']  # type: sg.Graph
+        #     graph.draw_circle(values['-GRAPH-'],
+        #                       fill_color='yellow',
+        #                       radius=20)
+        #     print("[LOG] Circle drawn at: " + str(values['-GRAPH-']))
 
-        elif event == "-GRAPH-":
-            graph = window['-GRAPH-']  # type: sg.Graph
-            graph.draw_circle(values['-GRAPH-'],
-                              fill_color='yellow',
-                              radius=20)
-            print("[LOG] Circle drawn at: " + str(values['-GRAPH-']))
         elif event == "Set Theme":
             print("[LOG] Clicked Set Theme!")
             theme_chosen = values['-THEME LISTBOX-'][0]
             print("[LOG] User Chose Theme: " + str(theme_chosen))
             window.close()
             window = make_window(theme_chosen)
+
+        ### CREATE AND OPEN FILE ###
         elif event == 'Create and open file':
             print('[LOG] Clicked Create and open file')
-            sg.popup
+            window_open_file = WindowOpenFile()
+            fp = window_open_file.getfpointer()
+
         elif event == 'About':
             print("[LOG] Clicked About!")
             sg.popup(
                 'Application for the collection of data for the ANSIA Team of the ASP Program XVIII cycle.',
-                'The application was kindly designed by the online boys P&G.',
+                'The application was kindly designed by the online boys.',
                 'The application is based on the design provided in the PySimpleGUI Demo All Elements.',
-                '','The app may contain an easter egg...','',
+                '',
+                'The app may contain an easter egg...',
+                '',
                 keep_on_top=True)
 
     window.close()

@@ -1,34 +1,42 @@
 #!/usr/bin/env python3
 
-import PySimpleGUI as sg
 import os
 
-class WindowOpenFile():
-    def __init__(self, theme='BluePurple'):
-        self.path = '/home/$USER/Documents/Vineyards_data/'
-        self.name = 'data1'
-        self.file = None
-        
-        sg.theme(theme)
-        layout = [
-            [
-                sg.Text('Type the path where you want your csv file to be saved:'),
-            ],
-            [
-                sg.Input(size=(70, 1), key='-PATH-', default_text='/home/ppp/Documents/Vineyards_data/')
-            ],
-            [
-                sg.Text('Type the name for your csv file:'),
-            ],
-            [
-                sg.Input(size=(70, 1), key='-NAME-', default_text='')
-            ],
-            [
-                sg.Button('Open'),
-                sg.Button('Cancel')
-            ]]
+import PySimpleGUI as sg
 
-        window = sg.Window('Open file', layout)
+
+class WindowOpenFile():
+
+    def __init__(self, theme='BluePurple'):
+        self.path = os.path.dirname(
+            os.path.realpath(__file__)) + '/DataCollected/'
+        # self.path = cwd = os.getcwd()  # for current working directory
+        try:
+            os.mkdir(self.path)
+        except:
+            pass
+        self.name = 'data'
+        self.fp = None
+
+        sg.theme(theme)
+        layout = [[
+            sg.Text('Type the path where you want your file to be saved:'),
+        ], [sg.Input(size=(70, 1), key='-PATH-', default_text=self.path)],
+                  [
+                      sg.Text('Type the name for your file:'),
+                      sg.Text(size=(35, 1), key='-WARNING-')
+                  ],
+                  [
+                      sg.Input(size=(70, 1),
+                               key='-NAME-',
+                               default_text=self.name)
+                  ], [sg.Button('Open'),
+                      sg.Button('Cancel')]]
+
+        window = sg.Window('Open file',
+                           layout,
+                           finalize=True,
+                           keep_on_top=True)
 
         while True:
             event, values = window.read()
@@ -37,16 +45,22 @@ class WindowOpenFile():
             if event == 'Open':
                 self.path = values['-PATH-']
                 self.name = values['-NAME-']
-                try:
-                    os.mkdir(self.path)
-                self.file = open(self.path+self.name+'.csv', 'w+')
-                pass
+                if os.path.exists(self.path + self.name + '.tif'):
+                    window['-WARNING-'].update('FILE ALREADY EXISTS')
+                else:
+                    self.fp = open(self.path + self.name + '.tif', 'w+')
+                    print('File name: ' + self.path + self.name + '.tif')
+                    window.close()
 
-        window.close()
+    def getfpointer(self):
+        return self.fp
+
 
 def main():
     w = WindowOpenFile()
-    print(w.file)
+    fp = w.getfpointer()
+    print(fp, type(fp))
+
 
 if __name__ == '__main__':
     main()
