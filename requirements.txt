@@ -1,3 +1,4 @@
 PySimpleGUI
 RPi.bme280
 adafruit-circuitpython-dht
+tifffile
