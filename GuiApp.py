@@ -10,11 +10,12 @@ import PySimpleGUI as sg
 from slave_module import *
 
 from Openfile import WindowOpenFile
+from SaveFile import WndowSaveFile
 
 
 def make_window(theme):
     sg.theme(theme)
-    menu_def = [['&Application', ['&Create and open file']],
+    menu_def = [['&Application', ['&Create and open file (csv)', '&Save file (tiff)']],
                 ['&Help', ['&About']]]
 
     app_layout = [[
@@ -227,6 +228,10 @@ def main():
             print('[LOG] Clicked Create and open file')
             window_open_file = WindowOpenFile()
             fp = window_open_file.getfpointer()
+
+        elif event == 'Save file':
+            print('[LOG] Clicked Save file')
+            
 
         elif event == 'About':
             print("[LOG] Clicked About!")
