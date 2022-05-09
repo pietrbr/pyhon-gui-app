@@ -4,7 +4,7 @@
 # TODO: aggiungere tab per la raccolta foto
 
 import PySimpleGUI as sg
-from temperature_measure import *
+from slave_module import *
 
 
 def make_window(theme):
