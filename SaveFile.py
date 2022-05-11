@@ -5,7 +5,7 @@ import os
 import PySimpleGUI as sg
 
 
-class WindowOpenFile():
+class WindowSaveFile():
 
     def __init__(self, theme='BluePurple'):
         self.path = os.path.dirname(
@@ -30,10 +30,10 @@ class WindowOpenFile():
                       sg.Input(size=(70, 1),
                                key='-NAME-',
                                default_text=self.name)
-                  ], [sg.Button('Open'),
+                  ], [sg.Button('Save'),
                       sg.Button('Cancel')]]
 
-        window = sg.Window('Open file',
+        window = sg.Window('Save file',
                            layout,
                            finalize=True,
                            keep_on_top=True)
@@ -52,12 +52,12 @@ class WindowOpenFile():
                     print('File name: ' + self.path + self.name + '.tif')
                     window.close()
 
-    def getfpointer(self):
-        return self.fp
+    def getfpath(self):
+        return self.path + self.name + '.tif'
 
 
 def main():
-    w = WindowOpenFile()
+    w = WindowSaveFile()
     fp = w.getfpointer()
     print(fp, type(fp))
 
