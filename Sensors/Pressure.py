@@ -5,7 +5,7 @@ import bme280
 
 class Pressure(Sensor):
 
-    def __init__(self, name, bus, address=0x76):
+    def __init__(self, name, bus=None, address=0x76):
         self.name    = name
         
         port         = 1
@@ -26,6 +26,15 @@ class Pressure(Sensor):
 
     def measure(self):
         return self.PressureMeasure()
+
+def main():
+    w = Pressure('MyPressureSensor',)
+    fp = w.PressureMeasure()
+    print(fp, type(fp))
+
+
+if __name__ == '__main__':
+    main()
 
   # WITH ADAFRUIT
   # import board
