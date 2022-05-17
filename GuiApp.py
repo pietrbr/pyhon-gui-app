@@ -140,7 +140,7 @@ def make_window(theme):
         # use_custom_titlebar=True,
         finalize=True,
         keep_on_top=True,
-        scaling=4.0)
+        scaling=1.0)
     window.set_min_size(window.size)
     return window
 
