@@ -9,8 +9,8 @@ import PySimpleGUI as sg
 
 from slave_module import *
 
-from Openfile import WindowOpenFile
-from SaveFile import WindowSaveFile
+from FileManager.Openfile import WindowOpenFile
+from FileManager.SaveFile import WindowSaveFile
 
 
 def make_window(theme):

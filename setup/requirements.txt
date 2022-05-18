@@ -4,6 +4,4 @@ adafruit-circuitpython-dht
 adafruit-blinka
 RPI.GPIO
 adafruit-circuitpython-mlx90640
-tifffile
-numpy
-scipy
+#pypython
