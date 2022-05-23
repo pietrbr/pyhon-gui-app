@@ -1,5 +1,5 @@
 import numpy as np
-from tifffile import *
+from csv import DictWriter
 
 
 class TemperatureMeasure:
@@ -15,22 +15,15 @@ class TemperatureMeasure:
         return avg
 
 
-class MatrixMeasure:
-
-    def __init__(self):
-        pass
-
-    def gen_matrix(self):
-        data = np.random.randint(30, 255, (300, 300, 300), 'uint8')
-        return data
-
-
 if __name__ == "__main__":
     # bella = TemperatureMeasure()
     # a = bella.measure()
     # print(a, bella.measure())
 
-    mat = MatrixMeasure()
-    matrix = mat.gen_matrix()
-    imwrite('temp.tif', matrix, photometric='rgb')
-    imwrite('temp2.tif', matrix, photometric='minisblack')
+    headersCSV = ['ID', 'NAME', 'SUBJECT']
+    dict = {'ID': '04', 'NAME': 'John', 'SUBJECT': 'Mathematics'}
+
+    with open('CSVFILE.csv', 'a', newline='') as f_object:
+        dictwriter_object = DictWriter(f_object, fieldnames=headersCSV)
+        dictwriter_object.writerow(dict)
+        f_object.close()
