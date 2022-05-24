@@ -140,7 +140,7 @@ def main():
     fpath = None
     headersCSV = [
         'CODE', 'LAT', 'LON', 'AIR_TEMP', 'CANOPY_TEMP', 'DEW_TEMP',
-        'WIND SPEED', 'PRESSURE', 'SOLAR RAD'
+        'WIND SPEED', 'PRESSURE', 'SOLAR_RAD'
     ]
     display_dict = [
         '-AIR DISPLAY-', '-CANOPY DISPLAY-', '-DEW DISPLAY-', '-WIND DISPLAY-',
@@ -161,7 +161,7 @@ def main():
         'DEW_TEMP': None,
         'WIND SPEED': None,
         'PRESSURE': None,
-        'SOLAR RAD': None
+        'SOLAR_RAD': None
     }
     value = None
     window['-LOCATION-'].update('')
@@ -248,7 +248,7 @@ def main():
                 "{:.2f}".format(value))  # TODO: change here for acquisition
             progress_bar = window['-PROGRESS BAR RADIATION-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
-            dict['SOLAR RAD'] = value
+            dict['SOLAR_RAD'] = value
             value = None
             print("[LOG] Temperature measurement complete!")
 
@@ -287,7 +287,7 @@ def main():
                 'DEW_TEMP': None,
                 'WIND SPEED': None,
                 'PRESSURE': None,
-                'SOLAR RAD': None
+                'SOLAR_RAD': None
             }
             value = None
             for key in display_dict:
