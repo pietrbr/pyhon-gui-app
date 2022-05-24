@@ -59,9 +59,9 @@ class Temperature(Sensor):
 
 
 def main():
-    w = Temperature('MyTemperatureSensor', )
-    fp = w.measure()
-    print(fp, type(fp))
+    sensor = Temperature(name='MyTemperatureSensor')
+    value = w.measure()
+    print(value, type(value))
 
 
 if __name__ == '__main__':

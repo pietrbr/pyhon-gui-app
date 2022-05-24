@@ -11,7 +11,6 @@ from numpy import delete
 from slave_module import *
 
 from FileManager.Openfile import WindowOpenFile
-from FileManager.SaveFile import WindowSaveFile
 
 
 def make_window(theme):
@@ -140,7 +139,7 @@ def main():
     ### USE THREADS FOR LONG-LASTING MEASUREMENTS!
     fpath = None
     headersCSV = [
-        'CODE', 'LAT', 'LON', 'AIR TEMP', 'CANOPY TEMP', 'DEW TEMP',
+        'CODE', 'LAT', 'LON', 'AIR_TEMP', 'CANOPY_TEMP', 'DEW_TEMP',
         'WIND SPEED', 'PRESSURE', 'SOLAR RAD'
     ]
     display_dict = [
@@ -157,9 +156,9 @@ def main():
         'CODE': None,
         'LAT': None,
         'LON': None,
-        'AIR TEMP': None,
-        'CANOPY TEMP': None,
-        'DEW TEMP': None,
+        'AIR_TEMP': None,
+        'CANOPY_TEMP': None,
+        'DEW_TEMP': None,
         'WIND SPEED': None,
         'PRESSURE': None,
         'SOLAR RAD': None
@@ -194,7 +193,7 @@ def main():
                 "{:.2f}".format(value))  # TODO: change here for acquisition
             progress_bar = window['-PROGRESS BAR AIR-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
-            dict['AIR TEMP'] = value
+            dict['AIR_TEMP'] = value
             value = None
             print("[LOG] Temperature measurement complete!")
 
@@ -205,7 +204,7 @@ def main():
                 "{:.2f}".format(value))  # TODO: change here for acquisition
             progress_bar = window['-PROGRESS BAR CANOPY-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
-            dict['CANOPY TEMP'] = value
+            dict['CANOPY_TEMP'] = value
             value = None
             print("[LOG] Temperature measurement complete!")
 
@@ -216,7 +215,7 @@ def main():
                 "{:.2f}".format(value))  # TODO: change here for acquisition
             progress_bar = window['-PROGRESS BAR DEW-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
-            dict['DEW TEMP'] = value
+            dict['DEW_TEMP'] = value
             value = None
             print("[LOG] Temperature measurement complete!")
 
@@ -283,9 +282,9 @@ def main():
                 'CODE': None,
                 'LAT': None,
                 'LON': None,
-                'AIR TEMP': None,
-                'CANOPY TEMP': None,
-                'DEW TEMP': None,
+                'AIR_TEMP': None,
+                'CANOPY_TEMP': None,
+                'DEW_TEMP': None,
                 'WIND SPEED': None,
                 'PRESSURE': None,
                 'SOLAR RAD': None
