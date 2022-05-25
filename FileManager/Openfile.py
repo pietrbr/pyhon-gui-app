@@ -74,7 +74,7 @@ def main():
         'LON': None,
         'AIR TEMP': None,
         'CANOPY TEMP': None,
-        'DEW TEMP': None,
+        'HUM': None,
         'WIND SPEED': None,
         'PRESSURE': None,
         'SOLAR RAD': None
