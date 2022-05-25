@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from csv import DictWriter, writer
+from csv import writer
 
 import PySimpleGUI as sg
 

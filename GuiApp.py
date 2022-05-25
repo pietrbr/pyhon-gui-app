@@ -7,7 +7,6 @@ import PySimpleGUI as sg
 from csv import DictWriter
 
 from random import random  # TODO: to be deleted
-from slave_module import *  # TODO: to be deleted
 
 from FileManager.Openfile import WindowOpenFile
 
