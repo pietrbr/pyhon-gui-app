@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-# TODO: canopy temeprature si raccoglie attraverso la camera termica
-# TODO: aggiungere tab per la raccolta foto
-
 import PySimpleGUI as sg
 from csv import DictWriter
 
@@ -188,7 +185,7 @@ def main():
             for key in values:
                 if len(key) > le:
                     le = len(key)
-            for key in values:  # TODO: add spaces depending on the length of the values[key]
+            for key in values:
                 print(' ' * 6, key, ' ' * (le - len(key)), '= ', values[key])
         if event in (None, 'Exit'):
             print("EVENT = Clicked Exit!")
