@@ -196,7 +196,6 @@ def main():
 
         ### SENSOR ACQUISITION ###
         elif event == 'Air temperature':
-            meas = TemperatureMeasure()
             value = random()  # TODO: change here for acquisition
             window['-AIR DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR AIR-']
@@ -206,7 +205,6 @@ def main():
             print("[LOG] Air temperature measurement complete!")
 
         elif event == 'Canopy temperature':
-            meas = TemperatureMeasure()
             value = random()  # TODO: change here for acquisition
             window['-CANOPY DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR CANOPY-']
@@ -216,7 +214,6 @@ def main():
             print("[LOG] Canopy temperature measurement complete!")
 
         elif event == 'Humidity':
-            meas = TemperatureMeasure()
             value = random()  # TODO: change here for acquisition
             window['-HUMIDITY DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR HUMIDITY-']
@@ -226,7 +223,6 @@ def main():
             print("[LOG] Humidity measurement complete!")
 
         elif event == 'Pressure':
-            meas = TemperatureMeasure()
             value = random()  # TODO: change here for acquisition
             window['-PRESSURE DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR PRESSURE-']
@@ -236,7 +232,6 @@ def main():
             print("[LOG] Pressure measurement complete!")
 
         elif event == 'Solar radiation':
-            meas = TemperatureMeasure()
             value = random()  # TODO: change here for acquisition
             window['-RADIATION DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR RADIATION-']
@@ -268,8 +263,8 @@ def main():
             with open(fpath, 'a', newline='') as f:
                 dict['CODE'] = values['-LOCATION-']
                 dict['WIND_SPEED'] = values['-WIND_SPEED-']
-                dict['LAT'] = None  # TODO: use module for GPS, delete None
-                dict['LON'] = None  # TODO: use module for GPS, delete None
+                dict['LAT'] = random()  # TODO: use module for GPS, delete random()
+                dict['LON'] = random()  # TODO: use module for GPS, delete random()
                 dictwriter = DictWriter(f, fieldnames=headersCSV)
                 dictwriter.writerow(dict)
                 f.close()
