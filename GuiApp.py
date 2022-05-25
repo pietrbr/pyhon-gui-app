@@ -16,64 +16,68 @@ def make_window(theme):
     menu_def = [['&Application', ['&Create and open file']],
                 ['&Help', ['&About']]]
 
-    app_layout = [[
-        sg.Text('Location:', size=(10, 1)),
-        sg.Input(size=(15, 1), key='-LOCATION-'),
-        sg.Text('Lat:', size=(5, 1)),
-        sg.Text(size=(10, 1), key='-LAT DISPLAY-'),
-        sg.Text('Lon:', size=(5, 1)),
-        sg.Text(size=(10, 1), key='-LON DISPLAY-')
-    ],
-                  [
-                      sg.Text('Wind speed:', size=(10, 1)),
-                      sg.Input(size=(15, 1), key='-WIND_SPEED-'),
-                      sg.Text("m/s")
-                  ],
-                  [
-                      sg.Button('Air temperature', size=(20, 1)),
-                      sg.ProgressBar(100,
-                                     orientation='h',
-                                     size=(20, 20),
-                                     key='-PROGRESS BAR AIR-'),
-                      sg.Text(size=(5, 1), key='-AIR DISPLAY-'),
-                      sg.Text("°C")
-                  ],
-                  [
-                      sg.Button('Canopy temperature', size=(20, 1)),
-                      sg.ProgressBar(100,
-                                     orientation='h',
-                                     size=(20, 20),
-                                     key='-PROGRESS BAR CANOPY-'),
-                      sg.Text(size=(5, 1), key='-CANOPY DISPLAY-'),
-                      sg.Text("°C")
-                  ],
-                  [
-                      sg.Button('Humidity', size=(20, 1)),
-                      sg.ProgressBar(100,
-                                     orientation='h',
-                                     size=(20, 20),
-                                     key='-PROGRESS BAR HUMIDITY-'),
-                      sg.Text(size=(5, 1), key='-HUMIDITY DISPLAY-'),
-                      sg.Text("°C")
-                  ],
-                  [
-                      sg.Button('Pressure', size=(20, 1)),
-                      sg.ProgressBar(100,
-                                     orientation='h',
-                                     size=(20, 20),
-                                     key='-PROGRESS BAR PRESSURE-'),
-                      sg.Text(size=(5, 1), key='-PRESSURE DISPLAY-'),
-                      sg.Text("hPa")
-                  ],
-                  [
-                      sg.Button('Solar radiation', size=(20, 1)),
-                      sg.ProgressBar(100,
-                                     orientation='h',
-                                     size=(20, 20),
-                                     key='-PROGRESS BAR RADIATION-'),
-                      sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
-                      sg.Text("W/m\u00b2")
-                  ], [sg.Button('Save', size=(10, 3))]]
+    app_layout = [
+        [
+            sg.Text('Location:', size=(10, 1)),
+            sg.Input(size=(15, 1), key='-LOCATION-'),
+            sg.Text('', size=(12, 1)),
+            sg.Button('Save', size=(10, 1))
+            # sg.Text('Lat:', size=(5, 1)),
+            # sg.Text(size=(10, 1), key='-LAT DISPLAY-'),
+            # sg.Text('Lon:', size=(5, 1)),
+            # sg.Text(size=(10, 1), key='-LON DISPLAY-')
+        ],
+        [
+            sg.Text('Wind speed:', size=(10, 1)),
+            sg.Input(size=(15, 1), key='-WIND_SPEED-'),
+            sg.Text("m/s")
+        ],
+        [
+            sg.Button('Air temperature', size=(20, 1)),
+            sg.ProgressBar(100,
+                           orientation='h',
+                           size=(10, 20),
+                           key='-PROGRESS BAR AIR-'),
+            sg.Text(size=(5, 1), key='-AIR DISPLAY-'),
+            sg.Text("°C")
+        ],
+        [
+            sg.Button('Canopy temperature', size=(20, 1)),
+            sg.ProgressBar(100,
+                           orientation='h',
+                           size=(10, 20),
+                           key='-PROGRESS BAR CANOPY-'),
+            sg.Text(size=(5, 1), key='-CANOPY DISPLAY-'),
+            sg.Text("°C")
+        ],
+        [
+            sg.Button('Humidity', size=(20, 1)),
+            sg.ProgressBar(100,
+                           orientation='h',
+                           size=(10, 20),
+                           key='-PROGRESS BAR HUMIDITY-'),
+            sg.Text(size=(5, 1), key='-HUMIDITY DISPLAY-'),
+            sg.Text("°C")
+        ],
+        [
+            sg.Button('Pressure', size=(20, 1)),
+            sg.ProgressBar(100,
+                           orientation='h',
+                           size=(10, 20),
+                           key='-PROGRESS BAR PRESSURE-'),
+            sg.Text(size=(5, 1), key='-PRESSURE DISPLAY-'),
+            sg.Text("hPa")
+        ],
+        [
+            sg.Button('Solar radiation', size=(20, 1)),
+            sg.ProgressBar(100,
+                           orientation='h',
+                           size=(10, 20),
+                           key='-PROGRESS BAR RADIATION-'),
+            sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
+            sg.Text("W/m\u00b2")
+        ]
+    ]
 
     logging_layout = [[sg.Text("Anything printed will display here!")],
                       [
@@ -142,8 +146,12 @@ def main():
     ]
     # keys of dictonary for displayed values
     display_dict = [
-        '-LAT DISPLAY-', '-LON DISPLAY-', '-AIR DISPLAY-', '-CANOPY DISPLAY-',
-        '-HUMIDITY DISPLAY-', '-PRESSURE DISPLAY-', '-RADIATION DISPLAY-'
+        # '-LAT DISPLAY-', '-LON DISPLAY-',
+        '-AIR DISPLAY-',
+        '-CANOPY DISPLAY-',
+        '-HUMIDITY DISPLAY-',
+        '-PRESSURE DISPLAY-',
+        '-RADIATION DISPLAY-'
     ]
     # keys of dictonary for displayed bars
     bar_dict = [
