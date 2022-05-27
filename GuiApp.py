@@ -180,9 +180,9 @@ def main():
         window[key].update(0)
 
     # Initialize Each Sensor
-    tempSensor  = DHT22('Sensore di Temperatura e Umidità')
+    tempSensor = DHT22('Sensore di Temperatura e Umidità')
     lightSensor = TSL2591('Sensore di Luce Ambientale')
-    uvSensor    = LTR390('Sensore Radiazione Ultravioletta')
+    uvSensor = LTR390('Sensore Radiazione Ultravioletta')
 
     while True:  # This is the Event Loop
         event, values = window.read(timeout=100)
@@ -201,10 +201,10 @@ def main():
 
         ### SENSOR ACQUISITION ###
         elif event == 'Air temperature':
-            value,_ = tempSensor.measure()
+            value, _ = tempSensor.measure()
             # value = (value + pressSensor.measure()[1])/2 # Take the average between the two temp by diff sensors
-            window['-AIR DISPLAY-'].update(
-                "{:.2f}".format(value))  # TODO: change here for acquisition # DONE
+            window['-AIR DISPLAY-'].update("{:.2f}".format(
+                value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR AIR-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['AIR_TEMP'] = round(value, 2)
@@ -224,8 +224,8 @@ def main():
             # TODO this should be RELATIVE HUMIDITY and not DEW TEMP
             value = tempSensor.measure()[1]
             # value = (value + pressSensor.measure()[2])/2
-            window['-DEW DISPLAY-'].update(
-                "{:.2f}".format(value))  # TODO: change here for acquisition # DONE
+            window['-DEW DISPLAY-'].update("{:.2f}".format(
+                value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR DEW-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['HUM'] = round(value, 2)
@@ -242,7 +242,8 @@ def main():
             print("[LOG] Pressure measurement complete!")
 
         elif event == 'Solar radiation':
-            temp  = lightSensor.measure() # TODO we should merge the IF and UV information, how?
+            temp = lightSensor.measure(
+            )  # TODO we should merge the IF and UV information, how?
             value = uvSensor.measure()
             # value = value + temp
             window['-RADIATION DISPLAY-'].update(
@@ -276,8 +277,10 @@ def main():
             with open(fpath, 'a', newline='') as f:
                 dict['CODE'] = values['-LOCATION-']
                 dict['WIND_SPEED'] = values['-WIND_SPEED-']
-                dict['LAT'] = random()  # TODO: use module for GPS, delete random()
-                dict['LON'] = random()  # TODO: use module for GPS, delete random()
+                dict['LAT'] = random(
+                )  # TODO: use module for GPS, delete random()
+                dict['LON'] = random(
+                )  # TODO: use module for GPS, delete random()
                 dictwriter = DictWriter(f, fieldnames=headersCSV)
                 dictwriter.writerow(dict)
                 f.close()

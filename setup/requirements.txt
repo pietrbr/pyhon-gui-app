@@ -4,4 +4,5 @@ adafruit-circuitpython-dht
 adafruit-blinka
 RPI.GPIO
 adafruit-circuitpython-mlx90640
+smbus
 #pypython

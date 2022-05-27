@@ -86,12 +86,13 @@ MAX_COUNT = (65535)  # 0xFFFF
 # int pin
 INI_PIN = 23
 
+
 class TSL2591(Sensor):
 
     def __init__(self, name, address=ADDR):
-        self.i2c     = smbus.SMBus(1)
+        self.i2c = smbus.SMBus(1)
         self.address = address
-        self.name    = name
+        self.name = name
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
@@ -122,7 +123,7 @@ class TSL2591(Sensor):
         self.Cpl = (atime * again) / LUX_DF
 
     def property(self):
-      print('Hey, I am a Light sensor! My name is ', self.name)
+        print('Hey, I am a Light sensor! My name is ', self.name)
 
     def Read_Byte(self, Addr):
         Addr = (COMMAND_BIT | Addr) & 0xFF
@@ -175,22 +176,21 @@ class TSL2591(Sensor):
 
     def measure(self):
         return self.Lux()
-    
+
     def tls25911_light_sensor(self):
         return self.measure()
 
 
 if __name__ == '__main__':
-	sensor = TSL2591('Sensore Di Luce Ambientale')
-	# sensor.SET_LuxInterrupt(20, 200)
-	time.sleep(1)
-	try:
-		while True:
-			lux = sensor.Lux()
-			print("Lux: %d" %lux)
-			time.sleep(0.5)
-			
-	except KeyboardInterrupt:
-		# sensor.Disable()
-		exit()
-    
+    sensor = TSL2591('Sensore Di Luce Ambientale')
+    # sensor.SET_LuxInterrupt(20, 200)
+    time.sleep(1)
+    try:
+        while True:
+            lux = sensor.Lux()
+            print("Lux: %d" % lux)
+            time.sleep(0.5)
+
+    except KeyboardInterrupt:
+        # sensor.Disable()
+        exit()

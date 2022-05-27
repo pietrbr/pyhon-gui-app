@@ -3,6 +3,7 @@ from Sensor import *
 import board
 import adafruit_dht
 
+
 class DHT22(Sensor):
 
     def __init__(self, name='DHT22'):
@@ -20,7 +21,6 @@ class DHT22(Sensor):
         # Initial the dht device, with data pin connected to:
         # dhtDevice = adafruit_dht.DHT22(board.D18)
 
-      
         try:
             # Print the values to the serial port
             temperature_c = self.sensor.temperature
@@ -35,9 +35,10 @@ class DHT22(Sensor):
         except Exception as error:
             self.sensor.exit()
             raise error
-  
+
     def measure(self):
         return self.TemperatureMeasure()
+
 
 def main():
     w = DHT22('Sensore di Temperatura')
