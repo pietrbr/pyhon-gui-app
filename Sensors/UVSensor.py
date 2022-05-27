@@ -1,3 +1,4 @@
+from Sensor import *
 import time
 import math
 import smbus
@@ -39,13 +40,14 @@ GAIN_9  = (0x3)
 GAIN_18 = (0x4)
 
 
-class LTR390:
+class LTR390(Sensor):
 
-    def __init__(self, address=ADDR):
+    def __init__(self, name, address=ADDR):
 
         self.i2c     = smbus.SMBus(1)
         self.address = address
         self.ID      = self.Read_Byte(LTR390_PART_ID)
+        self.name    = name
 
         # print("ID = %#x" %self.ID)
         if(self.ID != 0xB2):
@@ -58,6 +60,9 @@ class LTR390:
         # self.Write_Byte(LTR390_INT_CFG, 0x34) # UVS_INT_EN=1, Command=0x34
         # self.Write_Byte(LTR390_GAIN, GAIN_3) #  Resolution=18bits, Meas Rate = 100ms
         
+    def property(self):
+      print('Hey, I am !', self.name)
+
     def Read_Byte(self, cmd):
         return self.i2c.read_byte_data(self.address, cmd)
 

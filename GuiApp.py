@@ -5,13 +5,16 @@
 
 import PySimpleGUI as sg
 from csv import DictWriter
+from Sensors.LightSensor import TSL2591
+from Sensors.Temperature import DHT22
+from Sensors.UVSensor import LTR390
 
-from numpy import delete
+#from numpy import delete
 
 from slave_module import *
 
 from FileManager.Openfile import WindowOpenFile
-from FileManager.SaveFile import WindowSaveFile
+#from FileManager.SaveFile import WindowSaveFile (I don't have the code for this :( )
 
 
 def make_window(theme):
@@ -171,6 +174,11 @@ def main():
     for key in bar_dict:
         window[key].update(0)
 
+    # Initialize Each Sensor
+    tempSensor  = DHT22('Sensore di Temperatura e Umidità')
+    lightSensor = TSL2591('Sensore di Luce Ambientale')
+    uvSensor    = LTR390('Sensore Radiazione Ultravioletta')
+
     while True:  # This is the Event Loop
         event, values = window.read(timeout=100)
         if event not in (sg.TIMEOUT_EVENT, sg.WIN_CLOSED):
@@ -188,10 +196,10 @@ def main():
 
         ### SENSOR ACQUISITION ###
         elif event == 'Air temperature':
-            meas = TemperatureMeasure()
-            value = meas.measure_avg_3()
+            value = tempSensor.measure()[0]
+            # value = (value + pressSensor.measure()[1])/2 # Take the average between the two temp by diff sensors
             window['-AIR DISPLAY-'].update(
-                "{:.2f}".format(value))  # TODO: change here for acquisition
+                "{:.2f}".format(value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR AIR-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['AIR TEMP'] = value
@@ -210,10 +218,11 @@ def main():
             print("[LOG] Temperature measurement complete!")
 
         elif event == 'Dew temperature':
-            meas = TemperatureMeasure()
-            value = meas.measure_avg_3()
+            # TODO this should be RELATIVE HUMIDITY and not DEW TEMP
+            value = tempSensor.measure()[1]
+            # value = (value + pressSensor.measure()[2])/2
             window['-DEW DISPLAY-'].update(
-                "{:.2f}".format(value))  # TODO: change here for acquisition
+                "{:.2f}".format(value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR DEW-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['DEW TEMP'] = value
@@ -243,8 +252,9 @@ def main():
             print("[LOG] Temperature measurement complete!")
 
         elif event == 'Solar radiation':
-            meas = TemperatureMeasure()
-            value = meas.measure_avg_3()
+            temp  = lightSensor.measure() # TODO we should merge the IF and UV information, how?
+            value = uvSensor.measure()
+            # value = value + temp
             window['-RADIATION DISPLAY-'].update(
                 "{:.2f}".format(value))  # TODO: change here for acquisition
             progress_bar = window['-PROGRESS BAR RADIATION-']

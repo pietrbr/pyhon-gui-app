@@ -3,7 +3,7 @@ from Sensor import *
 import board
 import adafruit_dht
 
-class Temperature(Sensor):
+class DHT22(Sensor):
 
   def __init__(self, name):
       self.name   = name
@@ -33,14 +33,8 @@ class Temperature(Sensor):
           temperature_c = dhtDevice.temperature
           # temperature_f = temperature_c * (9 / 5) + 32
           humidity = dhtDevice.humidity
-          print(
-              "Temp: {:.1f} C    Humidity: {}% ".format(
-                  temperature_c, humidity
-              )
-          )
-
           # Check if you want to return also humidity from here
-          return temperature_c
+          return temperature_c, humidity
 
       except RuntimeError as error:
           # Errors happen fairly often, DHT's are hard to read, just keep going
@@ -51,3 +45,12 @@ class Temperature(Sensor):
   
   def measure(self):
       return self.TemperatureMeasure()
+
+def main():
+    w = DHT22('TemperatureSensor')
+    fp = w.measure()
+    print(fp, type(fp))
+
+
+if __name__ == '__main__':
+    main()

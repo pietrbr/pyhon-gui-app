@@ -42,7 +42,7 @@ class GPS(Sensor):
         self.ser  = serial.Serial(port, baudrate=9600, timeout=0.5)
   
     def property(self):
-        print('Hey, I am a Humidity sensor! My name is ', self.name)
+        print('Hey, I am a GPS sensor! My name is ', self.name)
     
     def GPSMeasure(self):
         flag = True
