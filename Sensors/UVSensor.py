@@ -83,7 +83,7 @@ class LTR390(Sensor):
         return self.UVS()
 
 if __name__ == '__main__':
-	sensor = LTR390()
+	sensor = LTR390('Sensore di Radiazione Ultravioletta')
 	time.sleep(1)
 	try:
 		while True:

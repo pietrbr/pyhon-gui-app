@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from csv import DictWriter, writer
+from csv import writer
 
 import PySimpleGUI as sg
 
@@ -74,7 +74,7 @@ def main():
         'LON': None,
         'AIR TEMP': None,
         'CANOPY TEMP': None,
-        'DEW TEMP': None,
+        'HUM': None,
         'WIND SPEED': None,
         'PRESSURE': None,
         'SOLAR RAD': None
