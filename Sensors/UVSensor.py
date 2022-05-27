@@ -1,6 +1,4 @@
-from Sensor import *
 import time
-import math
 import smbus
 
 ADDR = (0X53)
@@ -40,7 +38,7 @@ GAIN_9 = (0x3)
 GAIN_18 = (0x4)
 
 
-class LTR390(Sensor):
+class LTR390():
 
     def __init__(self, name, address=ADDR):
 

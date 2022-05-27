@@ -1,7 +1,4 @@
-from Sensor import *
-
 # GPS Module
-
 
 # sudo nano /boot/config.txt
 
@@ -34,40 +31,41 @@ import time
 import string
 import pynmea2
 
-class GPS(Sensor):
+
+class GPS():
 
     def __init__(self, name, port="/dev/ttyAMA0"):
         self.name = name
         self.port = port
-        self.ser  = serial.Serial(port, baudrate=9600, timeout=0.5)
-  
+        self.ser = serial.Serial(port, baudrate=9600, timeout=0.5)
+
     def property(self):
         print('Hey, I am a GPS sensor! My name is ', self.name)
-    
+
     def GPSMeasure(self):
         flag = True
 
         # THERE IS THE RISK YOU GET STUCK HERE
-        
+
         while flag:
             dataout = pynmea2.NMEAStreamReader()
             newdata = self.ser.readline()
 
             if newdata[0:6] == "$GPRMC":
-                
+
                 flag = False
-                newmsg=pynmea2.parse(newdata)
-                lat   =newmsg.latitude
-                lng   =newmsg.longitude
-                gps   = "Latitude=" + str(lat) + "and Longitude=" + str(lng)
+                newmsg = pynmea2.parse(newdata)
+                lat = newmsg.latitude
+                lng = newmsg.longitude
+                gps = "Latitude=" + str(lat) + "and Longitude=" + str(lng)
                 print(gps)
- 
+
     def measure(self):
         return self.GPSMeasure()
 
 
 def main():
-    w  = GPS('MyGPSSensor',)
+    w = GPS('MyGPSSensor', )
     fp = w.measure()
     print(fp, type(fp))
 

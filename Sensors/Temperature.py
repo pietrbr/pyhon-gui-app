@@ -1,10 +1,9 @@
-from Sensor import *
 # ! pip3 install adafruit-circuitpython-dht
 import board
 import adafruit_dht
 
 
-class DHT22(Sensor):
+class DHT22():
 
     def __init__(self, name='DHT22'):
         self.name = name

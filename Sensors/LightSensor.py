@@ -1,11 +1,8 @@
-from Sensor import *
-
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 
 import sys
 import time
-import math
 import smbus
 import RPi.GPIO as GPIO
 
@@ -87,7 +84,7 @@ MAX_COUNT = (65535)  # 0xFFFF
 INI_PIN = 23
 
 
-class TSL2591(Sensor):
+class TSL2591():
 
     def __init__(self, name, address=ADDR):
         self.i2c = smbus.SMBus(1)
