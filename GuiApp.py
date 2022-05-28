@@ -2,7 +2,9 @@
 
 import PySimpleGUI as sg
 from csv import DictWriter
+from Sensors.Camera import MLX90614_GY906
 from Sensors.LightSensor import TSL2591
+from Sensors.Pressure import BME280
 from Sensors.Temperature import DHT22
 from Sensors.UVSensor import LTR390
 
@@ -179,10 +181,15 @@ def main():
     for key in bar_dict:  # -PROGRESS BAR-
         window[key].update(0)
 
+    # ---------------------------------------------------
     # Initialize Each Sensor
-    tempSensor = DHT22('Sensore di Temperatura e Umidità')
+    # ---------------------------------------------------
+    tempSensor  = DHT22('Sensore di Temperatura e Umidità')
     lightSensor = TSL2591('Sensore di Luce Ambientale')
-    uvSensor = LTR390('Sensore Radiazione Ultravioletta')
+    uvSensor    = LTR390('Sensore Radiazione Ultravioletta')
+    cameraIR    = MLX90614_GY906('Sensore di Temperatura Superficiale')
+    pressSensor = BME280('Sensore di Pressione, Temperatura e umidità')
+    # ---------------------------------------------------
 
     while True:  # This is the Event Loop
         event, values = window.read(timeout=100)
@@ -202,7 +209,8 @@ def main():
         ### SENSOR ACQUISITION ###
         elif event == 'Air temperature':
             value, _ = tempSensor.measure()
-            # value = (value + pressSensor.measure()[1])/2 # Take the average between the two temp by diff sensors
+            temp  = pressSensor.measure()
+            value = (value + temp[1])/2 # Take the average between the two temp by diff sensors
             window['-AIR DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR AIR-']
@@ -212,7 +220,7 @@ def main():
             print("[LOG] Air temperature measurement complete!")
 
         elif event == 'Canopy temperature':
-            value = random()  # TODO: change here for acquisition
+            value =  cameraIR.measure() # TODO: change here for acquisition
             window['-CANOPY DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR CANOPY-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
@@ -222,7 +230,8 @@ def main():
 
         elif event == 'Humidity':
             _, value = tempSensor.measure()
-            # value = (value + pressSensor.measure()[2])/2
+            temp  = pressSensor.measure()
+            value = (value + temp[2])/2
             window['-HUMIDITY DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR HUMIDITY-']
@@ -232,7 +241,8 @@ def main():
             print("[LOG] Humidity measurement complete!")
 
         elif event == 'Pressure':
-            value = random()  # TODO: change here for acquisition
+            value = pressSensor.measure()
+            value = value[0]  # TODO: change here for acquisition
             window['-PRESSURE DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR PRESSURE-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]

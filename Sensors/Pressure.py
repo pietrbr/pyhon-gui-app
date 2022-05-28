@@ -66,7 +66,7 @@ t_fine = 0.0
 
 class BME280():
 
-    def __init__(self, name, address=I2C_ADDR):
+    def __init__(self, name='Sensore di Pressione, Temperatura e umidità', address=I2C_ADDR):
         self.i2c = smbus.SMBus(1)
         self.address = address
         self.name = name
@@ -206,7 +206,7 @@ class BME280():
         data = self.readData()
         # Data contains pressure, temperature and humidity measures
         # Data[0] has the pressure information
-        return data[0]
+        return data
 
 
 if __name__ == '__main__':

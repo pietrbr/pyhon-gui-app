@@ -38,7 +38,7 @@ class DHT22():
     def measure(self):
         value = None
         while value == None:
-            value, _ = self.TemperatureMeasure()
+            value = self.TemperatureMeasure()
         return value
 
 
