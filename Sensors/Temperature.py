@@ -38,17 +38,10 @@ class DHT22():
             return None, None
 
     def measure(self):
-<<<<<<< HEAD
-        value = None
-        while value == None:
-            value = self.TemperatureMeasure()
-        return value
-=======
         temperature, humidity = None, None
         while temperature == None or humidity == None:
             temperature, humidity = self.TemperatureMeasure()
         return temperature, humidity
->>>>>>> 4a088287b276c4df40f2df04d418e38ed0976fa1
 
 
 def main():
