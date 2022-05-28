@@ -36,7 +36,10 @@ class DHT22():
             raise error
 
     def measure(self):
-        return self.TemperatureMeasure()
+        value = None
+        while value == None:
+            value, _ = self.TemperatureMeasure()
+        return value
 
 
 def main():

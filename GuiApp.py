@@ -57,7 +57,7 @@ def make_window(theme):
                            size=(10, 20),
                            key='-PROGRESS BAR HUMIDITY-'),
             sg.Text(size=(5, 1), key='-HUMIDITY DISPLAY-'),
-            sg.Text("°C")
+            sg.Text("%")
         ],
         [
             sg.Button('Pressure', size=(20, 1)),
