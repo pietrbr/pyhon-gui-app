@@ -213,6 +213,8 @@ if __name__ == '__main__':
     sensor = BME280('Sensore di Pressione, Temperatura ed Umidità')
     sensor.get_calib_param()
     time.sleep(1)
+    print(sensor.measure())
+    
     try:
         # sensor.setup()
         data = []
