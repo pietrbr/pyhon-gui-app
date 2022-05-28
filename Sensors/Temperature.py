@@ -31,15 +31,24 @@ class DHT22():
         except RuntimeError as error:
             # Errors happen fairly often, DHT's are hard to read, just keep going
             print(error.args[0])
+            return None, None
         except Exception as error:
-            self.sensor.exit()
-            raise error
+            # self.sensor.exit()
+            # raise error
+            return None, None
 
     def measure(self):
+<<<<<<< HEAD
         value = None
         while value == None:
             value = self.TemperatureMeasure()
         return value
+=======
+        temperature, humidity = None, None
+        while temperature == None or humidity == None:
+            temperature, humidity = self.TemperatureMeasure()
+        return temperature, humidity
+>>>>>>> 4a088287b276c4df40f2df04d418e38ed0976fa1
 
 
 def main():
