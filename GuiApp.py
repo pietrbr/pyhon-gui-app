@@ -220,13 +220,12 @@ def main():
             value = None
             print("[LOG] Canopy temperature measurement complete!")
 
-        elif event == 'Dew temperature':
-            # TODO this should be RELATIVE HUMIDITY and not DEW TEMP
-            value = tempSensor.measure()[1]
+        elif event == 'Humidity':
+            _, value = tempSensor.measure()
             # value = (value + pressSensor.measure()[2])/2
-            window['-DEW DISPLAY-'].update("{:.2f}".format(
+            window['-HUMIDITY DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
-            progress_bar = window['-PROGRESS BAR DEW-']
+            progress_bar = window['-PROGRESS BAR HUMIDITY-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['HUM'] = round(value, 2)
             value = None
@@ -242,10 +241,9 @@ def main():
             print("[LOG] Pressure measurement complete!")
 
         elif event == 'Solar radiation':
-            temp = lightSensor.measure(
-            )  # TODO we should merge the IF and UV information, how?
+            temp = lightSensor.measure()
             value = uvSensor.measure()
-            # value = value + temp
+            value = value + temp
             window['-RADIATION DISPLAY-'].update(
                 "{:.2f}".format(value))  # TODO: change here for acquisition
             progress_bar = window['-PROGRESS BAR RADIATION-']
