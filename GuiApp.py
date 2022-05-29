@@ -189,6 +189,7 @@ def main():
     uvSensor    = LTR390('Sensore Radiazione Ultravioletta')
     cameraIR    = MLX90614_GY906('Sensore di Temperatura Superficiale')
     pressSensor = BME280('Sensore di Pressione, Temperatura e umidità')
+    gps         = GPS('Sensore Coordinate GPS','port="/dev/ttyS0"')
     
     pressSensor.get_calib_param()
     # ---------------------------------------------------
@@ -287,10 +288,12 @@ def main():
             with open(fpath, 'a', newline='') as f:
                 dict['CODE'] = values['-LOCATION-']
                 dict['WIND_SPEED'] = values['-WIND_SPEED-']
-                dict['LAT'] = random(
-                )  # TODO: use module for GPS, delete random()
-                dict['LON'] = random(
-                )  # TODO: use module for GPS, delete random()
+                # dict['LAT'] = random() # TODO: use module for GPS, delete random()
+                # dict['LON'] = random() # TODO: use module for GPS, delete random()
+                # Acquire Data from GPS
+                lat,lng = gps.measure()
+                dict['LAT'] = lat
+                dict['LON'] = lng
                 dictwriter = DictWriter(f, fieldnames=headersCSV)
                 dictwriter.writerow(dict)
                 f.close()
