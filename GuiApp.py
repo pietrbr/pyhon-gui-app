@@ -216,7 +216,7 @@ def main():
         ### SENSOR ACQUISITION ###
         elif event == 'Air temperature':
             value, _    = tempSensor.measure()
-            _, temp, _  = pressSensor.measure()
+            temp  = pressSensor.measure()
             value = (value + temp[1])/2 # Take the average between the two temp by diff sensors
             window['-AIR DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
