@@ -69,7 +69,7 @@ class GPS():
 
 
 def main():
-    w = GPS(name='MyGPSSensor', port='/dev/ttyS0')
+    w = GPS(name='MyGPSSensor', port="/dev/ttyAMA0")
     fp = w.measure()
     print(fp, type(fp))
 
