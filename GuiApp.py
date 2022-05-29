@@ -7,6 +7,7 @@ from Sensors.LightSensor import TSL2591
 from Sensors.Pressure import BME280
 from Sensors.Temperature import DHT22
 from Sensors.UVSensor import LTR390
+from Sensors.GPS import GPS
 
 from random import random  # TODO: to be deleted
 
@@ -78,6 +79,9 @@ def make_window(theme):
                            key='-PROGRESS BAR RADIATION-'),
             sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
             sg.Text("W/m\u00b2")
+        ],
+        [
+            sg.Button('Acquire EVERYTHING! :)', size=(20, 1))
         ]
     ]
 
@@ -265,6 +269,66 @@ def main():
             value = None
             print("[LOG] Solar radiation measurement complete!")
 
+        # !!! NEW CODE TODO: check this shit !!!
+        #     
+        elif event == 'Acquire EVERYTHING! :)':
+            # AIR TEMPERATURE
+            temp = lightSensor.measure()
+            value = uvSensor.measure()
+            value = value + temp
+            window['-RADIATION DISPLAY-'].update(
+                "{:.2f}".format(value))
+            progress_bar = window['-PROGRESS BAR RADIATION-']
+            [progress_bar.update(current_count=i + 1) for i in range(100)]
+            dict['SOLAR_RAD'] = round(value, 2)
+            value = None
+            print("[LOG] Solar radiation measurement complete!")
+
+            # CANOPY TEMPERATURE
+            value =  cameraIR.measure()
+            window['-CANOPY DISPLAY-'].update("{:.2f}".format(value))
+            progress_bar = window['-PROGRESS BAR CANOPY-']
+            [progress_bar.update(current_count=i + 1) for i in range(100)]
+            dict['CANOPY_TEMP'] = round(value, 2)
+            value = None
+            print("[LOG] Canopy temperature measurement complete!")
+
+            # HUMIDITY
+            _, value = tempSensor.measure()
+            temp  = pressSensor.measure()
+            value = (value + temp[1])/2
+            window['-HUMIDITY DISPLAY-'].update("{:.2f}".format(
+                value))  # TODO: change here for acquisition # DONE
+            progress_bar = window['-PROGRESS BAR HUMIDITY-']
+            [progress_bar.update(current_count=i + 1) for i in range(100)]
+            dict['HUM'] = round(value, 2)
+            value = None
+            print("[LOG] Humidity measurement complete!")
+
+            # PRESSURE
+            value = pressSensor.measure()
+            value = value[0]
+            window['-PRESSURE DISPLAY-'].update("{:.2f}".format(value))
+            progress_bar = window['-PROGRESS BAR PRESSURE-']
+            [progress_bar.update(current_count=i + 1) for i in range(100)]
+            dict['PRESSURE'] = round(value, 2)
+            value = None
+            print("[LOG] Pressure measurement complete!")
+
+            # SOLAR RADIATION
+            temp  = lightSensor.measure()
+            value = uvSensor.measure()
+            value = value + temp
+            window['-RADIATION DISPLAY-'].update(
+                "{:.2f}".format(value))  # TODO: change here for acquisition
+            progress_bar = window['-PROGRESS BAR RADIATION-']
+            [progress_bar.update(current_count=i + 1) for i in range(100)]
+            dict['SOLAR_RAD'] = round(value, 2)
+            value = None
+            print("[LOG] Solar radiation measurement complete!")
+
+        # END OF AcQUIRE EVERYTHING  
+
         elif event == "Set Theme":
             print("[LOG] Clicked Set Theme!")
             theme_chosen = values['-THEME LISTBOX-'][0]
@@ -320,11 +384,11 @@ def main():
         elif event == 'About':
             print("[LOG] Clicked About!")
             sg.popup(
-                'Application for the collection of data for the ANSIA Team of the ASP Program XVIII cycle.',
+                'Application for the collection of data for the ANSIA Team of the ASP Program XVII cycle.',
                 'The application was kindly designed by the online boys.',
                 'The application is based on the design provided in the PySimpleGUI Demo All Elements.',
                 '',
-                # 'The app may contain an easter egg...',
+                # 'The app may contain an easter egg...or not',
                 '',
                 keep_on_top=True)
 
