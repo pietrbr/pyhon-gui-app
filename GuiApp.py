@@ -193,7 +193,7 @@ def main():
     uvSensor    = LTR390('Sensore Radiazione Ultravioletta')
     cameraIR    = MLX90614_GY906('Sensore di Temperatura Superficiale')
     pressSensor = BME280('Sensore di Pressione, Temperatura e umidità')
-    gps         = GPS('Sensore Coordinate GPS','port="/dev/ttyAMA0"')
+    gps         = GPS(name='Sensore Coordinate GPS',port="/dev/ttyAMA0")
     
     pressSensor.get_calib_param()
     # ---------------------------------------------------

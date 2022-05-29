@@ -34,7 +34,7 @@ import pynmea2
 
 class GPS():
 
-    def __init__(self, name='Sensore GPS', port="/dev/ttyAMA0"):
+    def __init__(self, name='Sensore GPS', port='/dev/ttyAMA0'):
         self.name = name
         self.port = port
         self.ser = serial.Serial(port, baudrate=9600, timeout=0.5)
@@ -45,7 +45,7 @@ class GPS():
     def GPSMeasure(self):
         flag = True
         i = 0
-        max_iteration = 100
+        max_iteration = 1000
         while flag and i < max_iteration:
             i += 1
             dataout = pynmea2.NMEAStreamReader()
