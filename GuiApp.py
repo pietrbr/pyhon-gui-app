@@ -273,16 +273,16 @@ def main():
         #     
         elif event == 'Acquire EVERYTHING! :)':
             # AIR TEMPERATURE
-            temp = lightSensor.measure()
-            value = uvSensor.measure()
-            value = value + temp
-            window['-RADIATION DISPLAY-'].update(
-                "{:.2f}".format(value))
-            progress_bar = window['-PROGRESS BAR RADIATION-']
+            value, _    = tempSensor.measure()
+            temp  = pressSensor.measure()
+            value = (value + temp[1])/2 # Take the average between the two temp by diff sensors
+            window['-AIR DISPLAY-'].update("{:.2f}".format(
+                value))  # TODO: change here for acquisition # DONE
+            progress_bar = window['-PROGRESS BAR AIR-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
-            dict['SOLAR_RAD'] = round(value, 2)
+            dict['AIR_TEMP'] = round(value, 2)
             value = None
-            print("[LOG] Solar radiation measurement complete!")
+            print("[LOG] Air temperature measurement complete!")
 
             # CANOPY TEMPERATURE
             value =  cameraIR.measure()
