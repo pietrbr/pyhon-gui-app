@@ -206,7 +206,7 @@ class BME280():
         data = self.readData()
         # Data contains pressure, temperature and humidity measures
         # Data[0] has the pressure information
-        return data[0]
+        return data
 
 
 if __name__ == '__main__':

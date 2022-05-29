@@ -211,8 +211,8 @@ def main():
         ### SENSOR ACQUISITION ###
         elif event == 'Air temperature':
             value, _    = tempSensor.measure()
-            # _, temp, _  = pressSensor.measure()
-            # value = (value + temp)/2 # Take the average between the two temp by diff sensors
+            _, temp, _  = pressSensor.measure()
+            value = (value + temp[1])/2 # Take the average between the two temp by diff sensors
             window['-AIR DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR AIR-']
@@ -232,8 +232,8 @@ def main():
 
         elif event == 'Humidity':
             _, value = tempSensor.measure()
-            # _, _, temp  = pressSensor.measure()
-            # value = (value + temp)/2
+            temp  = pressSensor.measure()
+            value = (value + temp[1])/2
             window['-HUMIDITY DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR HUMIDITY-']
@@ -243,7 +243,8 @@ def main():
             print("[LOG] Humidity measurement complete!")
 
         elif event == 'Pressure':
-            value = pressSensor.measure()  # TODO: change here for acquisition
+            value = pressSensor.measure()
+            value = value[0]
             window['-PRESSURE DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR PRESSURE-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
