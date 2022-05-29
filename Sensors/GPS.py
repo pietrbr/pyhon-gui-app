@@ -45,7 +45,7 @@ class GPS():
     def GPSMeasure(self):
         flag = True
         i = 0
-        max_iteration = 1000
+        max_iteration = 150
         while flag and i < max_iteration:
             i += 1
             dataout = pynmea2.NMEAStreamReader()
