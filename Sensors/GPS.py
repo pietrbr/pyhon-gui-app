@@ -43,14 +43,13 @@ class GPS():
         print('Hey, I am a GPS sensor! My name is ', self.name)
 
     def GPSMeasure(self):
-        flag = True
         i = 0
         max_iteration = 150
-        while flag and i < max_iteration:
+        while i < max_iteration:
             i += 1
             dataout = pynmea2.NMEAStreamReader()
             newdata = self.ser.readline()
-
+            print(newdata)
             if newdata[0:6] == "$GPRMC":
 
                 flag = False

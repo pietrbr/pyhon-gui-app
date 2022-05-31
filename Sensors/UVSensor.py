@@ -75,7 +75,7 @@ class LTR390():
         Data3 = self.Read_Byte(LTR390_UVSDATA + 2)
         uv = (Data3 << 16) | (Data2 << 8) | Data1
         UVS = Data3 * 65536 + Data2 * 256 + Data1
-        print("UVS = ", UVS)
+        #print("UVS = ", UVS)
         return uv
 
     def measure(self):
