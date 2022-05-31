@@ -33,7 +33,10 @@ def make_window(theme):
         [
             sg.Text('Wind speed:', size=(10, 1)),
             sg.Input(size=(15, 1), key='-WIND_SPEED-'),
-            sg.Text("m/s")
+            sg.Text("m/s"),
+            sg.Text('Ground Hum:', size=(10, 1)),
+            sg.Input(size=(15, 1), key='-GROUND_HUM-'),
+            sg.Text("%")
         ],
         [
             sg.Button('Air temperature', size=(20, 1)),
@@ -72,12 +75,21 @@ def make_window(theme):
             sg.Text("hPa")
         ],
         [
-            sg.Button('Solar radiation', size=(20, 1)),
+            sg.Button('Infrared radiation', size=(20, 1)),
             sg.ProgressBar(100,
                            orientation='h',
                            size=(10, 20),
                            key='-PROGRESS BAR RADIATION-'),
             sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
+            sg.Text("W/m\u00b2")
+        ],
+        [
+            sg.Button('Ultraviolet radiation', size=(20, 1)),
+            sg.ProgressBar(100,
+                           orientation='h',
+                           size=(10, 20),
+                           key='-PROGRESS BAR UV RADIATION-'),
+            sg.Text(size=(5, 1), key='-UV RADIATION DISPLAY-'),
             sg.Text("W/m\u00b2")
         ],
         [
@@ -147,8 +159,8 @@ def main():
     fpath = None
     # headers for csv file
     headersCSV = [
-        'CODE', 'LAT', 'LON', 'AIR_TEMP', 'CANOPY_TEMP', 'HUM', 'WIND_SPEED',
-        'PRESSURE', 'SOLAR_RAD'
+        'CODE', 'LAT', 'LON', 'AIR_TEMP', 'CANOPY_TEMP', 'HUM', 'GROUND_HUM', 'WIND_SPEED',
+        'PRESSURE', 'IR_RAD', 'UV_RAD'
     ]
     # keys of dictonary for displayed values
     display_dict = [
@@ -157,13 +169,14 @@ def main():
         '-CANOPY DISPLAY-',
         '-HUMIDITY DISPLAY-',
         '-PRESSURE DISPLAY-',
-        '-RADIATION DISPLAY-'
+        '-RADIATION DISPLAY-',
+        '-UV RADIATION DISPLAY-'
     ]
     # keys of dictonary for displayed bars
     bar_dict = [
         '-PROGRESS BAR AIR-', '-PROGRESS BAR CANOPY-',
         '-PROGRESS BAR HUMIDITY-', '-PROGRESS BAR PRESSURE-',
-        '-PROGRESS BAR RADIATION-'
+        '-PROGRESS BAR RADIATION-', '-PROGRESS BAR UV RADIATION-'
     ]
     # dictonary for values acquired
     # reset dictonary values to 'None' to get ready for next collection
@@ -174,9 +187,11 @@ def main():
         'AIR_TEMP': None,
         'CANOPY_TEMP': None,
         'HUM': None,
+        'GROUND_HUM': None,
         'WIND_SPEED': None,
         'PRESSURE': None,
-        'SOLAR_RAD': None
+        'IR_RAD': None,
+        'UV_RAD': None
     }
     value = None
     window['-LOCATION-'].update('')  # CODE
@@ -257,17 +272,25 @@ def main():
             value = None
             print("[LOG] Pressure measurement complete!")
 
-        elif event == 'Solar radiation':
-            temp = lightSensor.measure()
-            value = uvSensor.measure()
-            value = value + temp
+        elif event == 'Infrared radiation':
+            value = lightSensor.measure()
             window['-RADIATION DISPLAY-'].update(
-                "{:.2f}".format(value))  # TODO: change here for acquisition
+                "{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR RADIATION-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
-            dict['SOLAR_RAD'] = round(value, 2)
+            dict['IR_RAD'] = round(value, 2)
             value = None
-            print("[LOG] Solar radiation measurement complete!")
+            print("[LOG] Infrared radiation measurement complete!")
+
+        elif event == 'Ultraviolet radiation':
+            value = uvSensor.measure()
+            window['-UV RADIATION DISPLAY-'].update(
+                "{:.2f}".format(value)) 
+            progress_bar = window['-PROGRESS BAR UV RADIATION-']
+            [progress_bar.update(current_count=i + 1) for i in range(100)]
+            dict['UV_RAD'] = round(value, 2)
+            value = None
+            print("[LOG] Infrared radiation measurement complete!")
 
         # !!! NEW CODE TODO: check this shit !!!
         #     
@@ -315,17 +338,25 @@ def main():
             value = None
             print("[LOG] Pressure measurement complete!")
 
-            # SOLAR RADIATION
-            temp  = lightSensor.measure()
-            value = uvSensor.measure()
-            value = value + temp
+            # INFRARED
+            value = lightSensor.measure()
             window['-RADIATION DISPLAY-'].update(
-                "{:.2f}".format(value))  # TODO: change here for acquisition
+                "{:.2f}".format(value))  
             progress_bar = window['-PROGRESS BAR RADIATION-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
-            dict['SOLAR_RAD'] = round(value, 2)
+            dict['IR_RAD'] = round(value, 2)
             value = None
-            print("[LOG] Solar radiation measurement complete!")
+            print("[LOG] Infrared radiation measurement complete!")
+
+            # ULTRAVIOLET
+            value = uvSensor.measure()
+            window['-UV RADIATION DISPLAY-'].update(
+                "{:.2f}".format(value)) 
+            progress_bar = window['-PROGRESS BAR UV RADIATION-']
+            [progress_bar.update(current_count=i + 1) for i in range(100)]
+            dict['UV_RAD'] = round(value, 2)
+            value = None
+            print("[LOG] Infrared radiation measurement complete!")
 
         # END OF AcQUIRE EVERYTHING  
 
@@ -352,6 +383,7 @@ def main():
             with open(fpath, 'a', newline='') as f:
                 dict['CODE'] = values['-LOCATION-']
                 dict['WIND_SPEED'] = values['-WIND_SPEED-']
+                dict['GROUND_HUM'] = values['-GROUND_HUM-']
                 # dict['LAT'] = random() # TODO: use module for GPS, delete random()
                 # dict['LON'] = random() # TODO: use module for GPS, delete random()
                 # Acquire Data from GPS
@@ -369,6 +401,7 @@ def main():
                 'AIR_TEMP': None,
                 'CANOPY_TEMP': None,
                 'HUM': None,
+                'GROUND_HUM':None,
                 'WIND_SPEED': None,
                 'PRESSURE': None,
                 'SOLAR_RAD': None
@@ -378,7 +411,7 @@ def main():
                 window[key].update('-')
             for key in bar_dict:
                 window[key].update(0)
-            for key in ['-LOCATION-', '-WIND_SPEED-']:
+            for key in ['-LOCATION-', '-WIND_SPEED-','-GROUND_HUM-']:
                 window[key].update('')
 
         elif event == 'About':
