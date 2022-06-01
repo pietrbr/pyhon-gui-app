@@ -51,10 +51,10 @@ class GPS():
             newdata = self.ser.readline()
             print(newdata[0:6], type(newdata[0:6]))
             print(newdata[0:6] == b'$GPRMC')
+
             if newdata[0:6] == b'$GPRMC':
 
-                flag = False
-                newmsg = pynmea2.parse(newdata)
+                newmsg = pynmea2.parse(newdata.decode("utf-8"))
                 lat = newmsg.latitude
                 lng = newmsg.longitude
                 gps = "Latitude=" + str(lat) + "and Longitude=" + str(lng)
