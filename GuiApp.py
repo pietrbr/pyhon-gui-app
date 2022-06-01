@@ -388,8 +388,8 @@ def main():
                 # dict['LON'] = random() # TODO: use module for GPS, delete random()
                 # Acquire Data from GPS
                 lat,lng = gps.measure()
-                dict['LAT'] = lat
-                dict['LON'] = lng
+                dict['LAT'] = round(lat, 2)
+                dict['LON'] = round(lng, 2)
                 dictwriter = DictWriter(f, fieldnames=headersCSV)
                 dictwriter.writerow(dict)
                 f.close()
