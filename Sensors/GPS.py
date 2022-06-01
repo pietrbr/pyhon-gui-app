@@ -53,14 +53,14 @@ class GPS():
             print(newdata[2:8])
             print(newdata[1:7])
             print(newdata[0:6])
-            if newdata[2:8] == "$GPRMC":
+            if newdata[0:6] == '$GPRMC':
 
                 flag = False
                 newmsg = pynmea2.parse(newdata)
                 lat = newmsg.latitude
                 lng = newmsg.longitude
-                # gps = "Latitude=" + str(lat) + "and Longitude=" + str(lng)
-                # print(gps)
+                gps = "Latitude=" + str(lat) + "and Longitude=" + str(lng)
+                print('MYSTRING', gps)
                 return lat,lng
 
         print('Failure')
