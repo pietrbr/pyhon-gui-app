@@ -49,11 +49,8 @@ class GPS():
             i += 1
             dataout = pynmea2.NMEAStreamReader()
             newdata = self.ser.readline()
-            print(newdata)
-            print(newdata[2:8])
-            print(newdata[1:7])
-            print(newdata[0:6])
-            if newdata[0:6] == '$GPRMC':
+            print(newdata[0:6], type(newdata[0:6]))
+            if str(newdata[0:6]) == '$GPRMC':
 
                 flag = False
                 newmsg = pynmea2.parse(newdata)
