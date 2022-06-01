@@ -290,7 +290,7 @@ def main():
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['UV_RAD'] = round(value, 2)
             value = None
-            print("[LOG] Infrared radiation measurement complete!")
+            print("[LOG] Ultraviolet radiation measurement complete!")
 
         # !!! NEW CODE TODO: check this shit !!!
         #     
@@ -356,7 +356,7 @@ def main():
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['UV_RAD'] = round(value, 2)
             value = None
-            print("[LOG] Infrared radiation measurement complete!")
+            print("[LOG] Ultraviolet radiation measurement complete!")
 
         # END OF AcQUIRE EVERYTHING  
 
