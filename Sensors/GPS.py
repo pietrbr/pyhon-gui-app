@@ -51,8 +51,7 @@ class GPS():
             newdata = self.ser.readline()
             print(newdata[0:6], type(newdata[0:6]))
             print(newdata[0:6] == b'$GPRMC')
-            print(newdata[0:6].decode("utf-8")== b'$GPRMC')
-            if str(newdata[0:6].decode("utf-8")) == "$GPRMC":
+            if newdata[0:6] == b'$GPRMC':
 
                 flag = False
                 newmsg = pynmea2.parse(newdata)
