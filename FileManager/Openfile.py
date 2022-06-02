@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os
+import os, logging
 from csv import writer
 
 import PySimpleGUI as sg
@@ -53,6 +53,7 @@ class WindowOpenFile():
                     try:
                         os.mkdir(self.path)
                     except:
+                        logging.info('Directory %s already exists', self.path)
                         pass
                     with open(self.path + self.name + self.type,
                               'w',
@@ -61,6 +62,8 @@ class WindowOpenFile():
                         w.writerow(headersCSV)
                         f.close()
                     print('File name: ' + self.path + self.name + self.type)
+                    logging.info('Created file %s for saving data',
+                                 self.path + self.name + self.type)
                     window.close()
 
     def getfilename(self):

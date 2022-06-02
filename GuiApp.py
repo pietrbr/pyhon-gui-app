@@ -9,9 +9,15 @@ from Sensors.Temperature import DHT22
 from Sensors.UVSensor import LTR390
 from Sensors.GPS import GPS
 
-from random import random  # TODO: to be deleted
+from random import random
+import logging
 
 from FileManager.Openfile import WindowOpenFile
+
+logging.basicConfig(level=logging.INFO,
+                    filename='app_logs.log',
+                    filemode='a',
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def make_window(theme):
@@ -23,19 +29,16 @@ def make_window(theme):
         [
             sg.Text('Location:', size=(10, 1)),
             sg.Input(size=(15, 1), key='-LOCATION-'),
-            sg.Text('', size=(12, 1)),
+            # sg.Text('', size=(12, 1)),
+            sg.Button('Acquire all', size=(18, 1)),
             sg.Button('Save', size=(10, 1))
-            # sg.Text('Lat:', size=(5, 1)),
-            # sg.Text(size=(10, 1), key='-LAT DISPLAY-'),
-            # sg.Text('Lon:', size=(5, 1)),
-            # sg.Text(size=(10, 1), key='-LON DISPLAY-')
         ],
         [
             sg.Text('Wind speed:', size=(10, 1)),
             sg.Input(size=(15, 1), key='-WIND_SPEED-'),
             sg.Text("m/s"),
-            sg.Text('Ground Hum:', size=(10, 1)),
-            sg.Input(size=(15, 1), key='-GROUND_HUM-'),
+            sg.Text('Ground humidity:', size=(15, 1)),
+            sg.Input(size=(10, 1), key='-GROUND_HUM-'),
             sg.Text("%")
         ],
         [
@@ -75,25 +78,22 @@ def make_window(theme):
             sg.Text("hPa")
         ],
         [
-            sg.Button('Infrared radiation', size=(20, 1)),
+            sg.Button('IR radiation', size=(20, 1)),
             sg.ProgressBar(100,
                            orientation='h',
                            size=(10, 20),
                            key='-PROGRESS BAR RADIATION-'),
-            sg.Text(size=(5, 1), key='-RADIATION DISPLAY-'),
+            sg.Text(size=(5, 1), key='-IR RADIATION DISPLAY-'),
             sg.Text("W/m\u00b2")
         ],
         [
-            sg.Button('Ultraviolet radiation', size=(20, 1)),
+            sg.Button('UV radiation', size=(20, 1)),
             sg.ProgressBar(100,
                            orientation='h',
                            size=(10, 20),
                            key='-PROGRESS BAR UV RADIATION-'),
             sg.Text(size=(5, 1), key='-UV RADIATION DISPLAY-'),
             sg.Text("W/m\u00b2")
-        ],
-        [
-            sg.Button('Acquire EVERYTHING! :)', size=(20, 1))
         ]
     ]
 
@@ -156,11 +156,12 @@ def make_window(theme):
 
 def main():
     window = make_window(sg.theme())
+    logging.info('New window opened')
     fpath = None
     # headers for csv file
     headersCSV = [
-        'CODE', 'LAT', 'LON', 'AIR_TEMP', 'CANOPY_TEMP', 'HUM', 'GROUND_HUM', 'WIND_SPEED',
-        'PRESSURE', 'IR_RAD', 'UV_RAD'
+        'CODE', 'LAT', 'LON', 'AIR_TEMP', 'CANOPY_TEMP', 'HUM', 'GROUND_HUM',
+        'WIND_SPEED', 'PRESSURE', 'IR_RAD', 'UV_RAD'
     ]
     # keys of dictonary for displayed values
     display_dict = [
@@ -169,7 +170,7 @@ def main():
         '-CANOPY DISPLAY-',
         '-HUMIDITY DISPLAY-',
         '-PRESSURE DISPLAY-',
-        '-RADIATION DISPLAY-',
+        '-IR RADIATION DISPLAY-',
         '-UV RADIATION DISPLAY-'
     ]
     # keys of dictonary for displayed bars
@@ -203,14 +204,16 @@ def main():
     # ---------------------------------------------------
     # Initialize Each Sensor
     # ---------------------------------------------------
-    tempSensor  = DHT22('Sensore di Temperatura e Umidità')
+    tempSensor = DHT22('Sensore di Temperatura e Umidità')
     lightSensor = TSL2591('Sensore di Luce Ambientale')
-    uvSensor    = LTR390('Sensore Radiazione Ultravioletta')
-    cameraIR    = MLX90614_GY906('Sensore di Temperatura Superficiale')
+    uvSensor = LTR390('Sensore Radiazione Ultravioletta')
+    cameraIR = MLX90614_GY906('Sensore di Temperatura Superficiale')
     pressSensor = BME280('Sensore di Pressione, Temperatura e umidità')
-    gps         = GPS(name='Sensore Coordinate GPS',port="/dev/ttyAMA0")
-    
+    gps = GPS(name='Sensore Coordinate GPS', port="/dev/ttyAMA0")
+    logging.info('Sensors calibrated')
+
     pressSensor.get_calib_param()
+    logging.info('Got calib params of pressure sensor')
     # ---------------------------------------------------
 
     while True:  # This is the Event Loop
@@ -230,37 +233,41 @@ def main():
 
         ### SENSOR ACQUISITION ###
         elif event == 'Air temperature':
-            value, _    = tempSensor.measure()
-            temp  = pressSensor.measure()
-            value = (value + temp[1])/2 # Take the average between the two temp by diff sensors
+            temp1, _ = tempSensor.measure()
+            temp2 = pressSensor.measure()
+            # temp1 = 12
+            # temp2 = (13, 14)
+            value = (
+                temp1 + temp2[1]
+            ) / 2  # Take the average between the two temp by diff sensors
             window['-AIR DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR AIR-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['AIR_TEMP'] = round(value, 2)
             value = None
-            print("[LOG] Air temperature measurement complete!")
+            logging.info("Air temperature measurement complete")
 
         elif event == 'Canopy temperature':
-            value =  cameraIR.measure() # TODO: change here for acquisition
+            value = cameraIR.measure()  # TODO: change here for acquisition
             window['-CANOPY DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR CANOPY-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['CANOPY_TEMP'] = round(value, 2)
             value = None
-            print("[LOG] Canopy temperature measurement complete!")
+            logging.info("Canopy temperature measurement complete")
 
         elif event == 'Humidity':
             _, value = tempSensor.measure()
-            temp  = pressSensor.measure()
-            value = (value + temp[1])/2
+            temp = pressSensor.measure()
+            value = (value + temp[1]) / 2
             window['-HUMIDITY DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR HUMIDITY-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['HUM'] = round(value, 2)
             value = None
-            print("[LOG] Humidity measurement complete!")
+            logging.info("Humidity measurement complete")
 
         elif event == 'Pressure':
             value = pressSensor.measure()
@@ -270,63 +277,65 @@ def main():
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['PRESSURE'] = round(value, 2)
             value = None
-            print("[LOG] Pressure measurement complete!")
+            logging.info("Pressure measurement complete")
 
-        elif event == 'Infrared radiation':
+        elif event == 'IR radiation':
             value = lightSensor.measure()
-            window['-RADIATION DISPLAY-'].update(
-                "{:.2f}".format(value))
+            # value = 12
+            window['-IR RADIATION DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR RADIATION-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['IR_RAD'] = round(value, 2)
             value = None
-            print("[LOG] Infrared radiation measurement complete!")
+            logging.info("IR radiation measurement complete")
 
-        elif event == 'Ultraviolet radiation':
+        elif event == 'UV radiation':
             value = uvSensor.measure()
-            window['-UV RADIATION DISPLAY-'].update(
-                "{:.2f}".format(value)) 
+            # value = 12
+            window['-UV RADIATION DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR UV RADIATION-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['UV_RAD'] = round(value, 2)
             value = None
-            print("[LOG] Ultraviolet radiation measurement complete!")
+            logging.info("UV radiation measurement complete")
 
-        # !!! NEW CODE TODO: check this shit !!!
-        #     
-        elif event == 'Acquire EVERYTHING! :)':
+        elif event == 'Acquire all':
             # AIR TEMPERATURE
-            value, _    = tempSensor.measure()
-            temp  = pressSensor.measure()
-            value = (value + temp[1])/2 # Take the average between the two temp by diff sensors
+            temp1, _ = tempSensor.measure()
+            temp2 = pressSensor.measure()
+            # temp1 = 12
+            # temp2 = 13
+            value = (
+                temp1 + temp2[1]
+            ) / 2  # Take the average between the two temp by diff sensors
             window['-AIR DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR AIR-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['AIR_TEMP'] = round(value, 2)
             value = None
-            print("[LOG] Air temperature measurement complete!")
+            logging.info("Air temperature measurement complete")
 
             # CANOPY TEMPERATURE
-            value =  cameraIR.measure()
+            value = cameraIR.measure()
             window['-CANOPY DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR CANOPY-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['CANOPY_TEMP'] = round(value, 2)
             value = None
-            print("[LOG] Canopy temperature measurement complete!")
+            logging.info("Canopy temperature measurement complete")
 
             # HUMIDITY
             _, value = tempSensor.measure()
-            temp  = pressSensor.measure()
-            value = (value + temp[1])/2
+            temp = pressSensor.measure()
+            value = (value + temp[1]) / 2
             window['-HUMIDITY DISPLAY-'].update("{:.2f}".format(
                 value))  # TODO: change here for acquisition # DONE
             progress_bar = window['-PROGRESS BAR HUMIDITY-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['HUM'] = round(value, 2)
             value = None
-            print("[LOG] Humidity measurement complete!")
+            logging.info("Humidity measurement complete")
 
             # PRESSURE
             value = pressSensor.measure()
@@ -336,60 +345,57 @@ def main():
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['PRESSURE'] = round(value, 2)
             value = None
-            print("[LOG] Pressure measurement complete!")
+            logging.info("Pressure measurement complete")
 
             # INFRARED
             value = lightSensor.measure()
-            window['-RADIATION DISPLAY-'].update(
-                "{:.2f}".format(value))  
+            window['-IR RADIATION DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR RADIATION-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['IR_RAD'] = round(value, 2)
             value = None
-            print("[LOG] Infrared radiation measurement complete!")
+            logging.info("IR radiation measurement complete")
 
             # ULTRAVIOLET
             value = uvSensor.measure()
-            window['-UV RADIATION DISPLAY-'].update(
-                "{:.2f}".format(value)) 
+            window['-UV RADIATION DISPLAY-'].update("{:.2f}".format(value))
             progress_bar = window['-PROGRESS BAR UV RADIATION-']
             [progress_bar.update(current_count=i + 1) for i in range(100)]
             dict['UV_RAD'] = round(value, 2)
             value = None
-            print("[LOG] Ultraviolet radiation measurement complete!")
+            logging.info("UV radiation measurement complete")
 
-        # END OF AcQUIRE EVERYTHING  
+        # END OF ACQUIRE ALL
 
         elif event == "Set Theme":
-            print("[LOG] Clicked Set Theme!")
+            logging.info("Clicked Set Theme")
             theme_chosen = values['-THEME LISTBOX-'][0]
-            print("[LOG] User Chose Theme: " + str(theme_chosen))
+            logging.info("User Chose Theme: " + str(theme_chosen))
             window.close()
             window = make_window(theme_chosen)
 
         ### CREATE AND OPEN FILE ###
         elif event == 'Create and open file':
-            print('[LOG] Clicked Create and open file')
+            logging.info('Clicked Create and open file')
             window_open_file = WindowOpenFile(headersCSV, theme=sg.theme())
             fpath = window_open_file.getfilename(
             )[:]  # attach [:] to make a copy of the string
-            print('[LOG] File created and saved; path: ', fpath)
+            logging.info('File created and saved - path: ', fpath)
             del window_open_file
 
         ### SAVE DATA TO FILE ###
         # check here on how to write csv files: https://www.delftstack.com/howto/python/python-append-to-csv/
         elif event == 'Save':
-            print('[LOG] Clicked Save!')
+            logging.info('Clicked Save')
             with open(fpath, 'a', newline='') as f:
                 dict['CODE'] = values['-LOCATION-']
                 dict['WIND_SPEED'] = values['-WIND_SPEED-']
                 dict['GROUND_HUM'] = values['-GROUND_HUM-']
-                # dict['LAT'] = random() # TODO: use module for GPS, delete random()
-                # dict['LON'] = random() # TODO: use module for GPS, delete random()
                 # Acquire Data from GPS
-                lat,lng = gps.measure()
-                dict['LAT'] = round(lat, 2)
-                dict['LON'] = round(lng, 2)
+                lat, lng = gps.measure()
+                # lat, lng = random(), random()
+                # dict['LAT'] = round(lat, 2)
+                # dict['LON'] = round(lng, 2)
                 dictwriter = DictWriter(f, fieldnames=headersCSV)
                 dictwriter.writerow(dict)
                 f.close()
@@ -401,7 +407,7 @@ def main():
                 'AIR_TEMP': None,
                 'CANOPY_TEMP': None,
                 'HUM': None,
-                'GROUND_HUM':None,
+                'GROUND_HUM': None,
                 'WIND_SPEED': None,
                 'PRESSURE': None,
                 'SOLAR_RAD': None
@@ -411,11 +417,11 @@ def main():
                 window[key].update('-')
             for key in bar_dict:
                 window[key].update(0)
-            for key in ['-LOCATION-', '-WIND_SPEED-','-GROUND_HUM-']:
+            for key in ['-LOCATION-', '-WIND_SPEED-', '-GROUND_HUM-']:
                 window[key].update('')
 
         elif event == 'About':
-            print("[LOG] Clicked About!")
+            logging.info("Clicked About")
             sg.popup(
                 'Application for the collection of data for the ANSIA Team of the ASP Program XVII cycle.',
                 'The application was kindly designed by the online boys.',

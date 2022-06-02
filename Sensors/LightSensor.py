@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 
-import sys
-import time
+import sys, logging, time
 import smbus
 import RPi.GPIO as GPIO
 
@@ -159,7 +158,7 @@ class TSL2591():
         lux = ((full - ir) * (1.00 - (ir / full))) / self.Cpl
         # lux = (full-ir)/ self.Cpl
         return lux
-    
+
     def Irradiance_VS_IR(self):
         status = self.Read_Byte(0x13)
         if (status & 0x10):
@@ -168,8 +167,8 @@ class TSL2591():
 
         full, IR = self.Read_2Channel()
         if full == 0xFFFF or ir == 0xFFFF:
-            print('Numerical overflow! SATURAZIONE del RANGE del SENSORE di RADIAZIONE INFRAROSSO !!!')
-        
+            logging.warning('Numerical overflow for IR radiation sensor')
+
         return IR
 
     def SET_LuxInterrupt(self, SET_LOW, SET_HIGH):
@@ -196,10 +195,11 @@ if __name__ == '__main__':
     time.sleep(1)
     try:
         while True:
-            lux   = sensor.Lux()
+            lux = sensor.Lux()
             print("Lux: %d" % lux)
             power_m2_VS_IR = sensor.Irradiance_VS_IR()
-            print("Irradiance in the visible and infrared: %d" % power_m2_VS_IR)
+            print("Irradiance in the visible and infrared: %d" %
+                  power_m2_VS_IR)
             time.sleep(0.5)
 
     except KeyboardInterrupt:
