@@ -165,11 +165,11 @@ class TSL2591():
             # print ('soft goto interrupt')
             self.Write_Byte(0xE7, 0x13)
 
-        full, IR = self.Read_2Channel()
+        full, ir = self.Read_2Channel()
         if full == 0xFFFF or ir == 0xFFFF:
             logging.warning('Numerical overflow for IR radiation sensor')
 
-        return IR
+        return ir
 
     def SET_LuxInterrupt(self, SET_LOW, SET_HIGH):
         full, ir = self.Read_2Channel()
