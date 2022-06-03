@@ -143,7 +143,7 @@ def make_window(theme):
     window = sg.Window(
         'Data collection application',
         layout,
-        grab_anywhere=True,
+        grab_anywhere=False,
         resizable=True,
         margins=(0, 0),
         # use_custom_titlebar=True,
