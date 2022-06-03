@@ -410,7 +410,8 @@ def main():
                 'GROUND_HUM': None,
                 'WIND_SPEED': None,
                 'PRESSURE': None,
-                'SOLAR_RAD': None
+                'IR_RAD': None,
+                'UV_RAD': None
             }
             value = None
             for key in display_dict:

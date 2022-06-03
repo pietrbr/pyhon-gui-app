@@ -75,12 +75,13 @@ def main():
         'CODE': None,
         'LAT': None,
         'LON': None,
-        'AIR TEMP': None,
-        'CANOPY TEMP': None,
+        'AIR_TEMP': None,
+        'CANOPY_TEMP': None,
         'HUM': None,
-        'WIND SPEED': None,
+        'WIND_SPEED': None,
         'PRESSURE': None,
-        'SOLAR RAD': None
+        'IR_RAD': None,
+        'UV_RAD': None
     }
     w = WindowOpenFile()
     filename = w.getfilename()
